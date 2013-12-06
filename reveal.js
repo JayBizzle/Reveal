@@ -34,83 +34,73 @@
 		}
 
 		Plugin.prototype = {
-				init: function ()
+			init: function () {
+				// Place initialization logic here
+				// You already have access to the DOM element and
+				// the options via the instance, e.g. this.element
+				// and this.settings
+				// you can add more functions like the one below and
+				// call them like so: this.yourOtherFunction(this.element, this.settings).
+				
+				
+				// get the viewport height
+				this.documentHeight = $(document).height()-$(window).height();
+				
+				var _this = this;
+				
+				
+				_this.totalElements = $(_this.settings.revealElement).length;
+				
+				var currentHeight = 0;
+				var bodyPadding = 0;
+				
+				
+				$(_this.settings.revealElement).each(function( index )
 				{
-					// Place initialization logic here
-					// You already have access to the DOM element and
-					// the options via the instance, e.g. this.element
-					// and this.settings
-					// you can add more functions like the one below and
-					// call them like so: this.yourOtherFunction(this.element, this.settings).
-					
-					
-					// get the viewport height
-					this.documentHeight = $(document).height()-$(window).height();
-					
-					var _this = this;
-					
-					
-					_this.totalElements = $(_this.settings.revealElement).length;
-					
-					var currentHeight = 0;
-					var bodyPadding = 0;
-					
-					
-					$(_this.settings.revealElement).each(function( index )
-					{
-						currentHeight += $(this).outerHeight();
+					currentHeight += $(this).outerHeight();
 
-						
-						if(currentHeight > $(window).height())
-						{
-							$(this).css({'position': 'fixed','bottom': 0, 'zIndex': _this.totalElements - index}).addClass('stuck');
-							bodyPadding += $(this).outerHeight();
-						}
-						else
-						{
-							$(this).css({'position': 'relative', 'zIndex': _this.totalElements - index}).addClass('flow');
-						}
-					});
 					
-					$('body').css('paddingBottom', bodyPadding);
-
-					$(window).on('scroll', function()
-					{
-						_this.update(_this);
-					});
-					
-					
-					$(window).on('resize', function()
-					{
-						_this.update(_this);
-					});						
-				},
-				update: function (_this)
-				{
-					var s = $(window).scrollTop();
-					var flowHeight = 0;
-					
-					$('.flow').each(function()
-					{
-						flowHeight += $(this).outerHeight();
-					});
-					
-					if($('.stuck').length > 0)
-					{
-						if($('.stuck').first().offset().top >= flowHeight)
-						{
-							$('.stuck').first().removeClass('stuck').addClass('flow').css({'position': 'relative', 'bottom': 'auto'});
-							$('body').css('padding-bottom', parseInt($('body').css('padding-bottom')) - $('.flow').last().outerHeight()+1);
-						}
+					if(currentHeight > $(window).height()) {
+						$(this).css({'position': 'fixed','bottom': 0, 'zIndex': _this.totalElements - index}).addClass('stuck');
+						bodyPadding += $(this).outerHeight();
 					}
-					if(flowHeight >= $(window).height() + s)
-					{
-					
-						$('.flow').last().removeClass('flow').addClass('stuck').css({'position': 'fixed', 'bottom': 0});
-						$('body').css('padding-bottom', parseInt($('body').css('padding-bottom')) + $('.stuck').first().outerHeight());
+					else {
+						$(this).css({'position': 'relative', 'zIndex': _this.totalElements - index}).addClass('flow');
 					}
+				});
+				
+				$('body').css('paddingBottom', bodyPadding);
 
+				$(window).on('scroll', function() {
+					_this.update(_this);
+				});
+				
+				
+				$(window).on('resize', function() {
+					_this.update(_this);
+				});						
+			},
+			update: function (_this) {
+				var s = $(window).scrollTop();
+				var flowHeight = 0;
+				
+				$('.flow').each(function() {
+					flowHeight += $(this).outerHeight();
+				});
+				
+				if($('.stuck').length > 0) {
+					if($('.stuck').first().offset().top >= flowHeight) {
+						$('.stuck').first().removeClass('stuck').addClass('flow').css({'position': 'relative', 'bottom': 'auto'});
+						$('body').css('padding-bottom', parseInt($('body').css('padding-bottom')) - $('.flow').last().outerHeight()+1);
+					}
 				}
+				if(flowHeight >= $(window).height() + s) {
+				
+					$('.flow').last().removeClass('flow').addClass('stuck').css({'position': 'fixed', 'bottom': 0});
+					$('body').css('padding-bottom', parseInt($('body').css('padding-bottom')) + $('.stuck').first().outerHeight());
+				}
+
+			}
 		};
 
 		// A really lightweight plugin wrapper around the constructor,

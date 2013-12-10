@@ -78,11 +78,14 @@
 				});						
 			},
 			update: function (_this) {
-				var s = $(window).scrollTop();
-				var flowHeight = 0;
-				
+			
 				var stuck = $('.stuck');
 				var flow = $('.flow');
+				
+				var offsetTop = flow.first().offset().top
+			
+				var s = $(window).scrollTop()+offsetTop;
+				var flowHeight = offsetTop;
 				
 				$('.flow').each(function() {
 					flowHeight += $(this).outerHeight();

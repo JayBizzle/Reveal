@@ -55,16 +55,13 @@
 				var bodyPadding = 0;
 				
 				
-				$(_this.settings.revealElement).each(function( index )
-				{
+				$(_this.settings.revealElement).each(function( index ) {
 					currentHeight += $(this).outerHeight();
 
-					
 					if(currentHeight > $(window).height()) {
 						$(this).css({'position': 'fixed','bottom': 0, 'zIndex': _this.totalElements - index}).addClass('stuck');
 						bodyPadding += $(this).outerHeight();
-					}
-					else {
+					} else {
 						$(this).css({'position': 'relative', 'zIndex': _this.totalElements - index}).addClass('flow');
 					}
 				});
@@ -84,22 +81,23 @@
 				var s = $(window).scrollTop();
 				var flowHeight = 0;
 				
+				var stuck = $('.stuck');
+				var flow = $('.flow');
+				
 				$('.flow').each(function() {
 					flowHeight += $(this).outerHeight();
 				});
 				
-				if($('.stuck').length > 0) {
-					if($('.stuck').first().offset().top >= flowHeight) {
-						$('.stuck').first().removeClass('stuck').addClass('flow').css({'position': 'relative', 'bottom': 'auto'});
-						$('body').css('padding-bottom', parseInt($('body').css('padding-bottom')) - $('.flow').last().outerHeight()+1);
+				if(stuck.length > 0) {
+					if(stuck.first().offset().top >= flowHeight) {
+						stuck.first().removeClass('stuck').addClass('flow').css({'position': 'relative', 'bottom': 'auto'});
+						$('body').css('padding-bottom', parseInt($('body').css('padding-bottom')) - $('.flow').last().outerHeight());
 					}
 				}
 				if(flowHeight >= $(window).height() + s) {
-				
 					$('.flow').last().removeClass('flow').addClass('stuck').css({'position': 'fixed', 'bottom': 0});
 					$('body').css('padding-bottom', parseInt($('body').css('padding-bottom')) + $('.stuck').first().outerHeight());
 				}
-
 			}
 		};
 

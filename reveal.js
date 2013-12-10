@@ -89,7 +89,7 @@
 				});
 				
 				if(stuck.length > 0) {
-					if(stuck.first().offset().top >= flowHeight) {
+					if(stuck.first().offset().top > flowHeight) {
 						stuck.first().removeClass('stuck').addClass('flow').css({'position': 'relative', 'bottom': 'auto'});
 						$('body').css('padding-bottom', parseInt($('body').css('padding-bottom')) - $('.flow').last().outerHeight());
 					}

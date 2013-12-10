@@ -67,7 +67,7 @@
 					});
 					
 					$('body').css('paddingBottom', bodyPadding);
-				}
+				});
 				
 				
 

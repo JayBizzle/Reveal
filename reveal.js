@@ -84,25 +84,28 @@
 			
 				var stuck = $('.stuck');
 				var flow = $('.flow');
-				
+					
 				var offsetTop = flow.first().offset().top
-			
+				
 				var s = $(window).scrollTop()+offsetTop;
-				var flowHeight = offsetTop;
 				
-				$('.flow').each(function() {
-					flowHeight += $(this).outerHeight();
-				});
-				
-				if(stuck.length > 0) {
-					if(stuck.first().offset().top > flowHeight) {
-						stuck.first().removeClass('stuck').addClass('flow').css({'position': 'relative', 'bottom': 'auto'});
-						$('body').css('padding-bottom', parseInt($('body').css('padding-bottom')) - $('.flow').last().outerHeight());
+				if(s >= 0) {			
+					var flowHeight = offsetTop;
+					
+					$('.flow').each(function() {
+						flowHeight += $(this).outerHeight();
+					});
+					
+					if(stuck.length > 0) {
+						if(stuck.first().offset().top > flowHeight) {
+							stuck.first().removeClass('stuck').addClass('flow').css({'position': 'relative', 'bottom': 'auto'});
+							$('body').css('padding-bottom', parseInt($('body').css('padding-bottom')) - $('.flow').last().outerHeight());
+						}
 					}
-				}
-				if(flowHeight >= $(window).height() + s) {
-					$('.flow').last().removeClass('flow').addClass('stuck').css({'position': 'fixed', 'bottom': 0});
-					$('body').css('padding-bottom', parseInt($('body').css('padding-bottom')) + $('.stuck').first().outerHeight());
+					if(flowHeight >= $(window).height() + s) {
+						$('.flow').last().removeClass('flow').addClass('stuck').css({'position': 'fixed', 'bottom': 0});
+						$('body').css('padding-bottom', parseInt($('body').css('padding-bottom')) + $('.stuck').first().outerHeight());
+					}
 				}
 			}
 		};

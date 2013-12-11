@@ -21,13 +21,13 @@
 		};
 
 		// The actual plugin constructor
-		function Plugin ( element, options ) {
+		function Plugin (element, options) {
 				this.element = element;
 				// jQuery has an extend method which merges the contents of two or
 				// more objects, storing the result in the first object. The first object
 				// is generally empty as we don't want to alter the default options for
 				// future instances of the plugin
-				this.settings = $.extend( {}, defaults, options );
+				this.settings = $.extend( {}, defaults, options);
 				this._defaults = defaults;
 				this._name = pluginName;
 				this.init();
@@ -47,8 +47,7 @@
 				this.documentHeight = $(document).height()-$(window).height();
 				
 				var _this = this;
-				
-				
+
 				_this.totalElements = $(_this.settings.revealElement).length;
 				
 				var currentHeight = 0;
@@ -68,14 +67,11 @@
 					
 					$('body').css('paddingBottom', bodyPadding);
 				});
-				
-				
 
 				$(window).on('scroll', function() {
 					_this.update(_this);
 				});
-				
-				
+
 				$(window).on('resize', function() {
 					_this.update(_this);
 				});						
@@ -112,12 +108,12 @@
 
 		// A really lightweight plugin wrapper around the constructor,
 		// preventing against multiple instantiations
-		$.fn[ pluginName ] = function ( options ) {
-				return this.each(function() {
-						if ( !$.data( this, "plugin_" + pluginName ) ) {
-								$.data( this, "plugin_" + pluginName, new Plugin( this, options ) );
-						}
-				});
+		$.fn[pluginName] = function ( options ) {
+			return this.each(function() {
+				if(!$.data(this, "plugin_" + pluginName)) {
+					$.data(this, "plugin_" + pluginName, new Plugin(this, options));
+				}
+			});
 		};
 		
 

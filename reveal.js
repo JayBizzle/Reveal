@@ -74,16 +74,19 @@
 
 				$(window).on('resize', function() {
 					_this.update(_this);
-				});						
+				});
+				
+
 			},
 			update: function (_this) {
 			
+				var s = 0;
 				var stuck = $('.stuck');
 				var flow = $('.flow');
 					
 				var offsetTop = flow.first().offset().top
 				
-				var s = $(window).scrollTop()+offsetTop;
+				s += $(window).scrollTop()+offsetTop;
 				
 				if(s >= 0) {			
 					var flowHeight = offsetTop;

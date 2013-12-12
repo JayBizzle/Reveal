@@ -47,27 +47,35 @@
 				this.documentHeight = $(document).height()-$(window).height();
 				
 				var _this = this;
+				var refresh = false;
+				
+				// this seems a bit of a hack, but in at least Chrome, if you scroll down the page
+				// then hit refresh, Chrome will take you to the scroll position you were at, but
+				// scrollTop() still returns 0. Delaying the fucntion call seems to overcome the issue
+				setTimeout(function() {
+					_this.preStack(_this);
+				},10);
 
+			},
+			preStack: function(_this) {
 				_this.totalElements = $(_this.settings.revealElement).length;
 				
 				var currentHeight = 0;
 				var bodyPadding = 0;
-				
-				$(window).one('scroll', function() {
-					$(_this.settings.revealElement).each(function( index ) {
-						currentHeight += $(this).outerHeight();
-	
-						if(currentHeight > $(window).height()+$(window).scrollTop()) {
-							$(this).css({'position': 'fixed','bottom': 0, 'zIndex': _this.totalElements - index}).addClass('stuck');
-							bodyPadding += $(this).outerHeight();
-						} else {
-							$(this).css({'position': 'relative', 'zIndex': _this.totalElements - index}).addClass('flow');
-						}
-					});
-					
-					$('body').css('paddingBottom', bodyPadding);
-				});
 
+				$(_this.settings.revealElement).each(function( index ) {
+					currentHeight += $(this).outerHeight();
+
+					if(currentHeight > $(window).height()+$(window).scrollTop()) {
+						$(this).css({'position': 'fixed','bottom': 0, 'zIndex': _this.totalElements - index}).addClass('stuck');
+						bodyPadding += $(this).outerHeight();
+					} else {
+						$(this).css({'position': 'relative', 'zIndex': _this.totalElements - index}).addClass('flow');
+					}
+				});
+				
+				$('body').css('paddingBottom', bodyPadding);
+				
 				$(window).on('scroll', function() {
 					_this.update(_this);
 				});
@@ -75,11 +83,8 @@
 				$(window).on('resize', function() {
 					_this.update(_this);
 				});
-				
-
 			},
 			update: function (_this) {
-			
 				var s = 0;
 				var stuck = $('.stuck');
 				var flow = $('.flow');

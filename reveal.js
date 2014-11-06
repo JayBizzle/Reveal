@@ -47,7 +47,6 @@
 				this.documentHeight = $(document).height()-$(window).height();
 				
 				var _this = this;
-				var refresh = false;
 				
 				// this seems a bit of a hack, but in at least Chrome, if you scroll down the page
 				// then hit refresh, Chrome will take you to the scroll position you were at, but
@@ -67,15 +66,19 @@
 					currentHeight += $(this).outerHeight();
 
 					if(currentHeight > $(window).height()+$(window).scrollTop()) {
-						$(this).css({'position': 'fixed','bottom': 0, 'zIndex': _this.totalElements - index}).addClass('stuck');
+						$(this).css({'position': 'absolute','top': (currentHeight - $(this).out), 'zIndex': ((_this.totalElements - index)*5)}).addClass('stuck');
 						bodyPadding += $(this).outerHeight();
 					} else {
-						$(this).css({'position': 'relative', 'zIndex': _this.totalElements - index}).addClass('flow');
+						$(this).css({'position': 'relative', 'zIndex': ((_this.totalElements - index)*5)}).addClass('flow');
 					}
 				});
 				
-				$('body').css('paddingBottom', bodyPadding);
-				
+				$('body').css('height', bodyPadding);
+				var windowScroll = function(event) {
+		            (!!window.requestAnimationFrame) ? requestAnimationFrame(_this.update) : _this.update(_this);
+		        }
+
+				 //$(window).bind('scroll.update', windowScroll);
 				$(window).on('scroll', function() {
 					_this.update(_this);
 				});
@@ -89,11 +92,11 @@
 				var stuck = $('.stuck');
 				var flow = $('.flow');
 					
-				var offsetTop = flow.first().offset().top
+				var offsetTop = flow.first().offset().top;
 				
 				s += $(window).scrollTop()+offsetTop;
 				
-				if(s >= 0) {			
+				if(s >= 0) {
 					var flowHeight = offsetTop;
 					
 					$('.flow').each(function() {
@@ -103,12 +106,12 @@
 					if(stuck.length > 0) {
 						if(stuck.first().offset().top > flowHeight) {
 							stuck.first().removeClass('stuck').addClass('flow').css({'position': 'relative', 'bottom': 'auto'});
-							$('body').css('padding-bottom', parseInt($('body').css('padding-bottom')) - $('.flow').last().outerHeight());
+							$('body').css('height', parseInt($('body').css('height')) - $('.flow').last().outerHeight());
 						}
 					}
 					if(flowHeight >= $(window).height() + s) {
-						$('.flow').last().removeClass('flow').addClass('stuck').css({'position': 'fixed', 'bottom': 0});
-						$('body').css('padding-bottom', parseInt($('body').css('padding-bottom')) + $('.stuck').first().outerHeight());
+						flow.last().removeClass('flow').addClass('stuck').css({'position': 'absolute', 'top': flowHeight});
+						$('body').css('height', parseInt($('body').css('height')) + $('.stuck').first().outerHeight());
 					}
 				}
 			}
